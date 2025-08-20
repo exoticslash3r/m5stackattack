@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Virtual M5Stack Bruce (Budget Version)</title>
+<style>
+body {
+    background: #000;
+    color: #0f0;
+    font-family: monospace;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+}
+h1 { color: #0ff; margin-bottom: 10px; text-align: center; }
+.m5stack {
+    width: 320px;
+    height: 180px;
+    background: #111;
+    border: 4px solid #0f0;
+    border-radius: 10px;
+    padding: 10px;
+    overflow-y: auto;
+    white-space: pre-wrap;
+}
+.button {
+    background: #111;
+    border: 2px solid #0f0;
+    color: #0f0;
+    padding: 6px 12px;
+    margin: 3px;
+    cursor: pointer;
+}
+.button:hover { background: #0f0; color: #000; }
+.menu { display: flex; flex-wrap: wrap; justify-content: center; margin-bottom: 10px; }
+</style>
+</head>
+<body>
+
+<h1>Virtual M5Stack Bruce (Budget Version)</h1>
+
+<div class="menu">
+    <button class="button" onclick="switchMode('wifi')">Wi-Fi</button>
+    <button class="button" onclick="switchMode('ble')">BLE</button>
+    <button class="button" onclick="switchMode('subghz')">Sub-GHz</button>
+    <button class="button" onclick="switchMode('rfid')">RFID</button>
+    <button class="button" onclick="switchMode('ir')">IR</button>
+</div>
+
+<div class="m5stack" id="screen">
+Select a mode to begin.
+</div>
+
+<div class="menu">
+    <button class="button" onclick="triggerAction('scan')">Scan</button>
+    <button class="button" onclick="triggerAction('attack')">Attack</button>
+    <button class="button" onclick="clearScreen()">Clear</button>
+</div>
+
+<script>
+let currentMode = '';
+let logs = [];
+
+const fakeData = {
+    wifi: ['HomeNet', 'CoffeeShop', 'FreeWiFi', 'M5Test', 'HiddenNetwork'],
+    ble: ['BLE_Tracker', 'SmartLight', 'Sensor123', 'M5StickBLE'],
+    subghz: ['433MHz_Device', '315MHz_Device', 'GarageOpener'],
+    rfid: ['Card_01', 'Tag_42', 'AccessKey', 'M5RFID_Test'],
+    ir: ['TV', 'AC', 'Fan', 'Projector']
+};
+
+function switchMode(mode){
+    currentMode = mode;
+    logs.push(`Mode switched to: ${mode.toUpperCase()}`);
+    renderScreen();
+}
+
+function triggerAction(action){
+    if(!currentMode){ alert('Select a mode first!'); return; }
+    if(action==='scan'){
+        logs.push(`Scanning ${currentMode.toUpperCase()}...`);
+        setTimeout(()=>simulateScan(), 1000);
+    } else if(action==='attack'){
+        logs.push(`${currentMode.toUpperCase()} attack triggered (simulated).`);
+        renderScreen();
+    }
+}
+
+function simulateScan(){
+    const items = fakeData[currentMode].map(d => {
+        if(currentMode==='wifi') return `${d} - Signal: ${Math.floor(Math.random()*100)}%`;
+        if(currentMode==='ble') return `${d} - RSSI: -${Math.floor(Math.random()*90)} dBm`;
+        if(currentMode==='subghz') return `${d} - Strength: ${Math.floor(Math.random()*100)}%`;
+        if(currentMode==='rfid') return `${d} - UID: ${Math.floor(Math.random()*99999999)}`;
+        if(currentMode==='ir') return `${d} detected`;
+    });
+    logs.push(...items);
+    renderScreen();
+}
+
+function clearScreen(){ logs = []; renderScreen(); }
+
+function renderScreen(){ document.getElementById('screen').textContent = logs.join('\n'); }
+</script>
+
+</body>
+</html>
