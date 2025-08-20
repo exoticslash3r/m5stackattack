@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Virtual M5Stack Bruce (Budget Version)</title>
+<title>Virtual M5Stack local.Bruce (Budget Version) (real)</title>
 <style>
 body {
     background: #000;
@@ -39,7 +39,7 @@ h1 { color: #0ff; margin-bottom: 10px; text-align: center; }
 </head>
 <body>
 
-<h1>Virtual M5Stack Bruce (Budget Version)</h1>
+<h1>Virtual M5Stack local.Bruce (Budget Version) (real)</h1>
 
 <div class="menu">
     <button class="button" onclick="switchMode('wifi')">Wi-Fi</button>
@@ -64,9 +64,9 @@ let currentMode = '';
 let logs = [];
 
 const fakeData = {
-    wifi: ['HomeNet', 'CoffeeShop', 'FreeWiFi', 'M5Test', 'HiddenNetwork'],
-    ble: ['BLE_Tracker', 'SmartLight', 'Sensor123', 'M5StickBLE'],
-    subghz: ['433MHz_Device', '315MHz_Device', 'GarageOpener'],
+    wifi: ['yourwifi', 'nearestwifi', 'UNKNOWN', 'M5Test', 'ERROR'],
+    ble: ['BLE_Tracker', 'BLEM5stackstickplus2', 'M5stackstickbruce', 'M5StickBLE'],
+    subghz: ['433MHz_Device', '315MHz_Device', 'M5stack'],
     rfid: ['Card_01', 'Tag_42', 'AccessKey', 'M5RFID_Test'],
     ir: ['TV', 'AC', 'Fan', 'Projector']
 };
@@ -89,7 +89,7 @@ function triggerAction(action){
 }
 
 function simulateScan(){
-    const items = fakeData[currentMode].map(d => {
+    const items = realData[currentMode].map(d => {
         if(currentMode==='wifi') return `${d} - Signal: ${Math.floor(Math.random()*100)}%`;
         if(currentMode==='ble') return `${d} - RSSI: -${Math.floor(Math.random()*90)} dBm`;
         if(currentMode==='subghz') return `${d} - Strength: ${Math.floor(Math.random()*100)}%`;
